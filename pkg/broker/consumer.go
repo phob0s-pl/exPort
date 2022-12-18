@@ -15,7 +15,7 @@ func NewConsumer(topic string, consumeFunc func([]byte)) (*Consumer, error) {
 		config = nsq.NewConfig()
 	)
 
-	consumer, err := nsq.NewConsumer(topic, "channel", config)
+	consumer, err := nsq.NewConsumer(topic, "devel", config)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,8 @@ func (c *Consumer) Stop() {
 	c.consumer.Stop()
 }
 
-func (c *Consumer) HandleMessage(m *nsq.Message) error {
-	c.consumeFunc(m.Body)
+func (c *Consumer) HandleMessage(msg *nsq.Message) error {
+	defer msg.Finish()
+	c.consumeFunc(msg.Body)
 	return nil
 }

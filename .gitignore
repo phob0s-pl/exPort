@@ -1,1 +1,4 @@
 /.idea
+/api-gateway
+/port-database
+/port-scanner
