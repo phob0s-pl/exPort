@@ -14,6 +14,7 @@ RUN make port-scanner
 FROM ubuntu:jammy
 
 COPY --from=builder /build/port-scanner /bin/port-scanner
+COPY iac/port-scanner/ports.json /ports.json
 
 WORKDIR /
 
