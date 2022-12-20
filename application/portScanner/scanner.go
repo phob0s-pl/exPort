@@ -7,6 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Application is port scanner application which scans file for ports and publishes each port as event
 type Application struct {
 	publisher ports.PortStorePublisher
 }

@@ -13,7 +13,7 @@ import (
 
 func main() {
 	var (
-		signalC   = make(chan os.Signal)
+		signalC   = make(chan os.Signal, 2)
 		listenerC = make(chan error)
 	)
 

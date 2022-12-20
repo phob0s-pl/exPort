@@ -1,6 +1,13 @@
 .PHONY: all
+all: test binaries
 
-all: api-gateway port-database port-scanner
+.PHONY: binaries
+binaries: api-gateway port-database port-scanner
+
+.PHONY: test
+test:
+	golangci-lint run ./...
+	go test -v ./...
 
 .PHONY: api-gateway
 api-gateway:
@@ -13,6 +20,9 @@ port-database:
 .PHONY: port-scanner
 port-scanner:
 	go build -o port-scanner ./cmd/portScanner
+
+.PHONY: docker-images
+docker-images: docker-api-gateway docker-port-scanner docker-port-database
 
 .PHONY: docker-api-gateway
 docker-api-gateway:

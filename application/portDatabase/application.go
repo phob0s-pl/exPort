@@ -9,6 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Application is database application which stores port to underlying database when message handler is invoked
 type Application struct {
 	database ports.PortStore
 }

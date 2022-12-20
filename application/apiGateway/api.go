@@ -8,6 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Applicaiton is api-gateway application which creates events upon exposed REST api call
 type Application struct {
 	srv       *http.Server
 	publisher ports.PortProcessPublisher

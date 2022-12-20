@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	signalC := make(chan os.Signal)
+	signalC := make(chan os.Signal, 2)
 
 	logger.Configure()
 	log.WithField("service", "database").
@@ -30,12 +30,10 @@ func main() {
 			WithError(err).Fatalf("failed to create consumer")
 	}
 
-	select {
-	case sig := <-signalC:
-		log.WithField("service", "database").
-			WithField("signal", sig.String()).
-			Infof("stopping service")
-		storeConsumer.Stop()
-		os.Exit(0)
-	}
+	sig := <-signalC
+	log.WithField("service", "database").
+		WithField("signal", sig.String()).
+		Infof("stopping service")
+	storeConsumer.Stop()
+	os.Exit(0)
 }

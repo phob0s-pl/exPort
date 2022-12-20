@@ -13,3 +13,7 @@ type Port struct {
 	Unlocs      []string
 	Code        string
 }
+
+func (p Port) IsValid() bool {
+	return p.Key != ""
+}

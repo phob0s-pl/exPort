@@ -1,9 +1,9 @@
 package memDB
 
 import (
-	"fmt"
-	"github.com/phob0s-pl/exPort/domain"
 	"sync"
+
+	"github.com/phob0s-pl/exPort/domain"
 )
 
 type Database struct {
@@ -24,16 +24,4 @@ func (d *Database) PortAdd(port *domain.Port) error {
 	d.store[port.Key] = port
 
 	return nil
-}
-
-func (d *Database) PortGet(key string) (*domain.Port, error) {
-	d.RLock()
-	defer d.RUnlock()
-
-	port, exist := d.store[key]
-	if !exist {
-		return nil, fmt.Errorf("not found")
-	}
-
-	return port, nil
 }
