@@ -22,12 +22,12 @@ services:
     ports:
       - "4171"
   api-gateway:
-    image: export-api-gateway:latest
+    image: phob0spl/api-gateway:latest
     depends_on:
       - nsqlookupd
     ports:
       - "8080:8080"
-  export-port-database:
-    image: export-port-database:latest
-  export-port-scanner:
-    image: export-port-scanner:latest
+  port-database:
+    image: phob0spl/port-database:latest
+  port-scanner:
+    image: phob0spl/port-scanner:latest
