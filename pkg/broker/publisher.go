@@ -42,35 +42,3 @@ func (p *Publisher) PublishPortStore(port *domain.Port) error {
 func (p *Publisher) PublishPortProcess(fileName string) error {
 	return p.producer.Publish(domain.TopicPortProcess, []byte(fileName))
 }
-
-func (p *Publisher) PublishPortGetRequest(key string, requestID domain.RequestID) error {
-	var (
-		buff    bytes.Buffer
-		encoder = gob.NewEncoder(&buff)
-	)
-
-	if err := encoder.Encode(&domain.PortRequest{
-		Key:       key,
-		RequestID: requestID,
-	}); err != nil {
-		return err
-	}
-
-	return p.producer.Publish(domain.TopicPortGetRequest, buff.Bytes())
-}
-
-func (p *Publisher) PublishPortGetResponse(requestID domain.RequestID, port *domain.Port) error {
-	var (
-		buff    bytes.Buffer
-		encoder = gob.NewEncoder(&buff)
-	)
-
-	if err := encoder.Encode(&domain.PortResponse{
-		Port:      port,
-		RequestID: requestID,
-	}); err != nil {
-		return err
-	}
-
-	return p.producer.Publish(domain.TopicPortGetRequest, buff.Bytes())
-}

@@ -1,21 +1,20 @@
 package main
 
 import (
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/phob0s-pl/exPort/application/portDatabase"
 	"github.com/phob0s-pl/exPort/domain"
 	"github.com/phob0s-pl/exPort/pkg/broker"
 	"github.com/phob0s-pl/exPort/pkg/logger"
 	"github.com/phob0s-pl/exPort/pkg/memDB"
 	log "github.com/sirupsen/logrus"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 func main() {
-	var (
-		signalC = make(chan os.Signal)
-	)
+	signalC := make(chan os.Signal)
 
 	logger.Configure()
 	log.WithField("service", "database").
@@ -23,19 +22,7 @@ func main() {
 
 	signal.Notify(signalC, syscall.SIGTERM, syscall.SIGINT)
 
-	publisher, err := broker.NewPublisher()
-	if err != nil {
-		log.WithField("service", "database").
-			WithError(err).Fatalf("failed to create publisher")
-	}
-
-	application := portDatabase.NewApplication(memDB.NewDatabase(), publisher)
-
-	getConsumer, err := broker.NewConsumer(domain.TopicPortGetRequest, application.HandleGetMessage)
-	if err != nil {
-		log.WithField("service", "database").
-			WithError(err).Fatalf("failed to create consumer")
-	}
+	application := portDatabase.NewApplication(memDB.NewDatabase())
 
 	storeConsumer, err := broker.NewConsumer(domain.TopicPortStore, application.HandleStoreMessage)
 	if err != nil {
@@ -49,8 +36,6 @@ func main() {
 			WithField("signal", sig.String()).
 			Infof("stopping service")
 		storeConsumer.Stop()
-		getConsumer.Stop()
-		publisher.Stop()
 		os.Exit(0)
 	}
 }

@@ -1,13 +1,14 @@
 package main
 
 import (
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/phob0s-pl/exPort/application/apiGateway"
 	"github.com/phob0s-pl/exPort/pkg/broker"
 	"github.com/phob0s-pl/exPort/pkg/logger"
 	log "github.com/sirupsen/logrus"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 func main() {
@@ -24,7 +25,8 @@ func main() {
 
 	publisher, err := broker.NewPublisher()
 	if err != nil {
-		log.WithError(err).Fatalf("failed to create publisher")
+		log.WithField("service", "api-gateway").
+			WithError(err).Fatalf("failed to create publisher")
 	}
 
 	application := apiGateway.NewApplication(publisher)

@@ -1,18 +1,19 @@
 package apiGateway
 
 import (
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/phob0s-pl/exPort/ports"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 )
 
 type Application struct {
 	srv       *http.Server
-	publisher ports.PortTaskPublisher
+	publisher ports.PortProcessPublisher
 }
 
-func NewApplication(publisher ports.PortTaskPublisher) *Application {
+func NewApplication(publisher ports.PortProcessPublisher) *Application {
 	var (
 		app = &Application{
 			publisher: publisher,
@@ -21,7 +22,6 @@ func NewApplication(publisher ports.PortTaskPublisher) *Application {
 	)
 
 	router.HandleFunc("/port/process-file/{filename}", app.portProcess)
-	router.HandleFunc("/port/get/{key}", app.portGet)
 
 	app.srv = &http.Server{
 		Addr:    ":8080",
@@ -63,13 +63,4 @@ func (a *Application) portProcess(writer http.ResponseWriter, request *http.Requ
 		writer.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-}
-
-func (a *Application) portGet(writer http.ResponseWriter, request *http.Request) {
-	//vars := mux.Vars(request)
-	//filename, ok := vars["key"]
-	//if !ok {
-	//	writer.WriteHeader(http.StatusBadRequest)
-	//	return
-	//}
 }

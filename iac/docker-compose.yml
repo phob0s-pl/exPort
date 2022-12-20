@@ -31,5 +31,3 @@ services:
     image: export-port-database:latest
   export-port-scanner:
     image: export-port-scanner:latest
-    volumes:
-      - "./ports.json:/ports.json"
