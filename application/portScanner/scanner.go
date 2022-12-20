@@ -16,6 +16,10 @@ func NewApplication(publisher ports.PortStorePublisher) *Application {
 }
 
 func (a *Application) HandleProcess(msg []byte) {
+	log.WithField("service", "scanner").
+		WithField("file", string(msg)).
+		Debugf("new file scanning request")
+
 	if err := portProcessor.ProcessJSONFile(string(msg), a.OnPort); err != nil {
 		log.WithField("service", "scanner").
 			WithError(err).

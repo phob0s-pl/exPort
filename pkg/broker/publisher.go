@@ -3,6 +3,7 @@ package broker
 import (
 	"bytes"
 	"encoding/gob"
+
 	"github.com/nsqio/go-nsq"
 	"github.com/phob0s-pl/exPort/domain"
 )
@@ -17,7 +18,7 @@ func (p *Publisher) Stop() {
 
 func NewPublisher() (*Publisher, error) {
 	config := nsq.NewConfig()
-	producer, err := nsq.NewProducer("127.0.0.1:4150", config)
+	producer, err := nsq.NewProducer("nsqd:4150", config)
 	if err != nil {
 		return nil, err
 	}
